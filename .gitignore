@@ -1,1 +1,3 @@
-elm_dependencies
+elm_dependencies/
+cache/
+build/
