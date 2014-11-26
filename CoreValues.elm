@@ -1,3 +1,5 @@
+module CoreValues where
+
 main : Element
 main = flow down sentences
 
