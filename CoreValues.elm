@@ -4,6 +4,7 @@ import Html (..)
 import Html.Tags as H
 import Html.Attributes as H
 import Window
+import Debug
 
 import Graphics.Input as Input
 
@@ -39,7 +40,7 @@ step update state =
 
 scene : State -> (Int, Int) -> Element
 scene state (w, h) =
-    container w h midTop (toElement 550 h (view state))
+    container w h midTop <| toElement 550 h <| view state
 
 state : Signal State
 state = foldp step defaultState updates.signal
