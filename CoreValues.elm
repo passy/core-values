@@ -15,7 +15,9 @@ type State =
     , textColor : Color
     }
 
-data Action = NoOp
+data Update
+    = NoOp
+    | ChangeField String
 
 defaultState : State
 defaultState =
@@ -28,23 +30,31 @@ main : Signal Element
 main = lift2 scene state Window.dimensions
 
 -- Stub so far, obviously.
-step : Action -> State -> State
-step action state =
-    case action of
+step : Update -> State -> State
+step update state =
+    case update of
         NoOp -> state
+        ChangeField str ->
+            { state | text <- str }
 
 scene : State -> (Int, Int) -> Element
 scene state (w, h) =
     container w h midTop (toElement 550 h (view state))
 
-actions : Input.Input Action
-actions = Input.input NoOp
-
 state : Signal State
-state = foldp step defaultState actions.signal
+state = foldp step defaultState updates.signal
+
+updates : Input.Input Update
+updates = Input.input NoOp
 
 view : State -> Html
 view state =
     H.div
         [ H.class "main" ]
-        [ H.h1 [] [ text state.text ] ]
+        [ H.h1 [] [ text state.text ]
+        , H.input
+            [ H.value state.text
+            , H.autofocus True
+            , on "input" getValue updates.handle ChangeField
+            ] []
+        ]
