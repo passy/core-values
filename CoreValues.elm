@@ -5,10 +5,9 @@ import Html.Tags as H
 import Html.Attributes as H
 import Window
 import Debug
+import List
 
 import Graphics.Input as Input
-
-type Color = String
 
 type State =
     { text : String
@@ -23,8 +22,8 @@ data Update
 defaultState : State
 defaultState =
     { text = "Innovate through experimentation."
-    , textColor = "#FFFFFF"
-    , bgColor = "#55ACEE"
+    , textColor = white
+    , bgColor = rgb 85 172 238
     }
 
 main : Signal Element
@@ -40,7 +39,7 @@ step update state =
 
 scene : State -> (Int, Int) -> Element
 scene state (w, h) =
-    container w h midTop <| toElement 550 h <| view state
+    color state.bgColor <| container w h midTop <| toElement 550 h <| view state
 
 state : Signal State
 state = foldp step defaultState updates.signal
@@ -48,11 +47,21 @@ state = foldp step defaultState updates.signal
 updates : Input.Input Update
 updates = Input.input NoOp
 
+colorToCSS : Color -> String
+colorToCSS c =
+    let
+        rgb = toRgb c
+        rgbList = [rgb.red, rgb.green, rgb.blue]
+    in
+        "rgb(" ++ (List.join ", " <| List.map show <| rgbList) ++ ")"
+
 view : State -> Html
 view state =
     H.div
         [ H.class "main" ]
-        [ H.h1 [] [ text state.text ]
+        [ H.h1
+            [ style [ prop "color" <| colorToCSS state.textColor ] ]
+            [ text state.text ]
         , H.input
             [ H.value state.text
             , H.autofocus True
