@@ -3,9 +3,11 @@ module CoreValues where
 import Html (..)
 import Html.Tags as H
 import Html.Attributes as H
+import Html.Events as H
 import Window
 import Debug
 import List
+import Styles
 
 import Graphics.Input as Input
 
@@ -18,6 +20,7 @@ type State =
 data Update
     = NoOp
     | ChangeField String
+    | FocusField
 
 defaultState : State
 defaultState =
@@ -33,9 +36,12 @@ main = lift2 scene state Window.dimensions
 step : Update -> State -> State
 step update state =
     case update of
-        NoOp -> state
         ChangeField str ->
             { state | text <- str }
+        FocusField ->
+            -- Umm, how do I issue an action from here?
+            { state | text <- "hi" }
+        _ -> state
 
 scene : State -> (Int, Int) -> Element
 scene state (w, h) =
@@ -58,13 +64,16 @@ colorToCSS c =
 view : State -> Html
 view state =
     H.div
-        [ H.class "main" ]
+        [ H.class "main"
+        , H.onclick updates.handle (\_ -> FocusField)
+        ]
         [ H.h1
             [ style [ prop "color" <| colorToCSS state.textColor ] ]
             [ text state.text ]
         , H.input
             [ H.value state.text
             , H.autofocus True
+            , style Styles.hiddenInput
             , on "input" getValue updates.handle ChangeField
             ] []
         ]
