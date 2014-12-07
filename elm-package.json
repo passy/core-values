@@ -1,0 +1,14 @@
+{
+    "version": "0.1.0",
+    "summary": "Core Value Generator",
+    "repository": "https://github.com/passy/core-values.git",
+    "license": "BSD3",
+    "source-directories": [
+        "."
+    ],
+    "exposed-modules": [],
+    "dependencies": {
+        "elm-lang/core": "1.0.0 <= v < 2.0.0",
+        "evancz/elm-html": "1.0.0 <= v < 2.0.0"
+    }
+}
