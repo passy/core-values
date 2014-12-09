@@ -1,9 +1,10 @@
 module Styles where
 
-import Html (..)
+import Html (Attribute)
+import Html.Attributes (style)
 
-hiddenInput : [CssProperty]
-hiddenInput =
-    [ prop "position" "absolute"
-    , prop "left" "-5000px"
+hiddenInput : Attribute
+hiddenInput = style
+    [ ("position", "absolute")
+    , ("left", "-5000px")
     ]
