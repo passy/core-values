@@ -51,7 +51,7 @@ scene state (w, h) =
     color state.bgColor <| container w h midTop <| H.toElement 550 h <| view state
 
 state : Signal State
-state = Signal.foldp step defaultState updates.signal
+state = Signal.foldp step defaultState (Signal.subscribe updates)
 
 updates : Signal.Channel Update
 updates = Signal.channel NoOp
@@ -68,7 +68,7 @@ view : State -> H.Html
 view state =
     H.div
         [ H.class "main"
-        , H.onClick updates.handle (\_ -> FocusField)
+        , H.onClick (Signal.send updates FocusField)
         ]
         [ H.h1
             [ H.style [ ("color", colorToCSS state.textColor) ] ]
@@ -76,7 +76,7 @@ view state =
         , H.input
             [ H.value state.text
             , H.autofocus True
-            , H.style Styles.hiddenInput
-            , H.on "input" H.targetValue updates.handle ChangeField
+            , Styles.hiddenInput
+            , H.on "input" H.targetValue (Signal.send updates << ChangeField)
             ] []
         ]
