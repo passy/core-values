@@ -51,7 +51,7 @@ scene state (w, h) =
     color state.bgColor <| container w h midTop <| H.toElement 550 h <| view state
 
 state : Signal State
-state = Signal.foldp step defaultState (Signal.subscribe updates)
+state = Signal.foldp step defaultState <| Signal.subscribe updates
 
 updates : Signal.Channel Update
 updates = Signal.channel NoOp
