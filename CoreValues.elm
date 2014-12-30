@@ -68,15 +68,17 @@ view : State -> H.Html
 view state =
     H.div
         [ H.class "main"
+        , H.style Styles.mainContainer
         , H.onClick (Signal.send updates FocusField)
         ]
         [ H.h1
-            [ H.style [ ("color", colorToCSS state.textColor) ] ]
+            [ H.style <| [ ("color", colorToCSS state.textColor) ] ++ Styles.coreText
+            ]
             [ H.text state.text ]
         , H.input
             [ H.value state.text
             , H.autofocus True
-            , Styles.hiddenInput
+            , H.style Styles.hiddenInput
             , H.on "input" H.targetValue (Signal.send updates << ChangeField)
             ] []
         ]
